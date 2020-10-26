@@ -1,0 +1,738 @@
+#include<GL/glut.h>
+#include<stdlib.h>
+#include<stdio.h>
+#include<string.h>
+void color1();
+void color2();
+void color3();
+void color4();
+void timer(int);
+void timer2(int);
+void timer3(int);
+void keyboard1(unsigned char,int,int);
+void keyboard2(unsigned char,int,int);
+void keyboard3(unsigned char,int,int);
+void keyboard4(unsigned char,int,int);
+void display1(void);
+void display2(void);
+void display3(void);
+void drawRect1(void);
+void drawRect2(void);
+void reset();
+float y2max=495,y4max=395,yd2=0;
+float y22max=495,y44max=395;
+float x1=100,y1=95,x2=200,y2=95;
+float x3=300,y3=95,x4=400,y4=95;
+float x11=100,y11=95,x22=200,y22=95;
+float x33=300,y33=95,x44=400,y44=95;
+float r,p,x_pos=1300;
+float yd=y2max-y4max;
+float yd1=y2-y1;
+float target;
+int state=0,flag=0,first=1,sec=2,third=3,four=4;
+void write(double x,double y,double scale,char* s)
+{	int i,l=strlen(s);
+	glPushMatrix();
+	glTranslatef(x,y,0.0);
+	glScalef(scale,scale,1.0);
+	for (i=0;i <l;i++)
+	   glutStrokeCharacter(GLUT_STROKE_ROMAN,s[i]);		
+	
+	glPopMatrix();
+}
+void myinit()
+{	
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glOrtho(0.0,500.0,0.0,500.0,-1.0,1.0);
+	glClearColor(0.0,0.0,0.0,0.0);
+}
+void reset()
+{
+	y2=95;
+	y4=95;
+	y22=95;
+	y44=95;
+	flag=0;
+	state=0;
+	glutPostRedisplay();
+}
+
+
+
+void keyboard3(unsigned char key,int x,int y)
+{	
+	switch(key)
+	{
+		case 'q': exit(0);
+		
+          	case '2':	
+				target=200;
+				state=1;
+				glutTimerFunc(0,timer,0);
+				glutPostRedisplay();
+					
+			  	break;
+		case '1':
+				target=100;
+				state=2;
+				glutTimerFunc(0,timer,0);
+				glutPostRedisplay();
+				break;
+		case '3':	target=300;
+				state=3;
+				glutTimerFunc(0,timer,0);
+				glutPostRedisplay();
+				break;
+		case '4':	target=400;
+				state=4;
+				glutTimerFunc(0,timer,0);
+				glutPostRedisplay();
+		case 'b':
+		case 'B':	glClearColor(0.0,0.0,0.0,0.0);
+				glutDestroyWindow(third);
+				glutInitWindowSize(1000,1000);
+				glutInitWindowPosition(10,10);
+				glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+				sec=glutCreateWindow("HOME");
+				
+				glutDisplayFunc(display2);
+				glutKeyboardFunc(keyboard2);
+				myinit();
+				reset();
+				glutMainLoop();
+   			
+							
+				
+				 
+	}
+	glutPostRedisplay();	
+}
+void keyboard4(unsigned char key,int x,int y)
+{	
+	switch(key)
+	{
+		case 'q': exit(0);
+		case 'a':
+          	case 'A': 	state=1;
+				glutTimerFunc(0,timer2,0);
+				glutPostRedisplay();
+					
+			  	break;
+   		case 's':
+		case 'S':	state=2;
+				glutTimerFunc(0,timer2,0);
+				glutPostRedisplay();	
+				break;
+    		case 'z':
+		case 'Z':	state=3;
+				glutTimerFunc(0,timer2,0);
+				glutPostRedisplay();
+				break;	
+		case 'x':
+		case 'X':	
+				state=4;
+				glutTimerFunc(0,timer2,0);
+				glutPostRedisplay();
+				break;
+		case 'd':
+		case 'D':	state=5;
+				glutTimerFunc(0,timer2,0);
+				glutPostRedisplay();	
+				break;
+		case 'c':
+		case 'C':	state=6;
+				glutTimerFunc(0,timer2,0);
+				glutPostRedisplay();						
+				break;	
+		case 'b':
+		case 'B':	reset();
+				glutDestroyWindow(third);
+				glutInitWindowSize(1000,1000);
+				glutInitWindowPosition(10,10);
+				glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+				sec=glutCreateWindow("HOME");
+				
+				glutDisplayFunc(display2);
+				glutKeyboardFunc(keyboard2);
+				myinit();
+				
+				glutMainLoop();	
+				break;			
+				
+				 
+	}
+	glutPostRedisplay();	
+}
+void keyboard1(unsigned char key,int x,int y)
+{	if(key=='f' || key=='F')
+	{	glutDestroyWindow(first);
+		glutInitWindowSize(1000,1000);
+		glutInitWindowPosition(10,10);
+		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+		sec=glutCreateWindow("HOME");
+		
+		glutDisplayFunc(display2);
+		glutKeyboardFunc(keyboard2);
+		myinit();
+		glutMainLoop();
+	}
+}
+void keyboard2(unsigned char key,int x,int y)
+{	if(key=='1')
+	{	 	
+		glutDestroyWindow(sec);
+		glutInitWindowSize(1000,1000);
+		glutInitWindowPosition(10,10);
+		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+		third=glutCreateWindow("WATER JUG PROBLEM");
+		//glClearColor(0.0,0.0,0.0,1.0);	
+		//glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		glutDisplayFunc(drawRect1);
+		glutKeyboardFunc(keyboard3);
+		myinit();
+		glutMainLoop();
+	}
+	else if(key=='2')
+	{		
+					
+		glutDestroyWindow(sec);
+		glutInitWindowSize(1000,1000);
+		glutInitWindowPosition(10,10);
+		glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+		third=glutCreateWindow("WATER JUG PROBLEM");
+		
+		glutDisplayFunc(drawRect2);
+		glutKeyboardFunc(keyboard4);
+		myinit();
+		glutMainLoop();
+	}
+	else if(key=='3')
+	{	exit(0);
+	}
+}
+	
+void rectangle()
+{
+    glBegin(GL_POLYGON);
+    glColor3f(0.0,0,1.0);
+    glVertex3f(100.0f, 20.0f, 0.0f);
+    glColor3f(0.0,0,1.0);
+    glVertex3f(400.0f, 20.0f, 0.0f);
+    glColor3f(0.0,0,1.0);
+    glVertex3f(400.0f, 80.0f, 0.0f);
+    glColor3f(0.0,0,1.0);
+    glVertex3f(100.0f, 80.0f, 0.0f);
+    glEnd();
+
+}
+
+
+
+void text()
+{
+    char menu[80]="INFINITE WATER SOURCE";
+    int len1;
+    len1 = strlen(menu);
+
+    glColor3f(1.0,1.0,1.0);
+
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+
+    gluOrtho2D( 0, 600, 0, 600 );
+
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+
+    glLoadIdentity();
+
+    glRasterPos2i(200, 60);
+
+
+    for ( int i = 0; i < len1; ++i )
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, menu[i]);
+    }
+
+    glPopMatrix();
+
+    glMatrixMode( GL_PROJECTION );
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
+}
+void text2()
+{
+    char menu[80]="4 LITRE";
+    int len1;
+    len1 = strlen(menu);
+
+    glColor3f(1.0,1.0,1.0);
+
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+
+    gluOrtho2D( 0, 600, 0, 600 );
+
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+
+    glLoadIdentity();
+
+    glRasterPos2i(150,300);
+
+
+    for ( int i = 0; i < len1; ++i )
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, menu[i]);
+    }
+
+    glPopMatrix();
+
+    glMatrixMode( GL_PROJECTION );
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
+}
+void text3()
+{
+    char menu[80]="3 LITRE";
+    int len1;
+    len1 = strlen(menu);
+
+    glColor3f(1.0,1.0,1.0);
+
+    glMatrixMode( GL_PROJECTION );
+    glPushMatrix();
+    glLoadIdentity();
+
+    gluOrtho2D( 0, 600, 0, 600 );
+
+    glMatrixMode( GL_MODELVIEW );
+    glPushMatrix();
+
+    glLoadIdentity();
+
+    glRasterPos2i(400,290);
+
+
+    for ( int i = 0; i < len1; ++i )
+    {
+        glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, menu[i]);
+    }
+
+    glPopMatrix();
+
+    glMatrixMode( GL_PROJECTION );
+    glPopMatrix();
+    glMatrixMode( GL_MODELVIEW );
+}
+void color1()
+{       //case a (1st jar)
+  glBegin(GL_POLYGON);
+	
+	glColor3f(0.0,0.0,1.0);        
+	glVertex2i(x1,y1);//y1=150
+	glVertex2i(x2,y1);
+	glVertex2i(x2,y2);//400
+	glVertex2i(x1,y2);
+  glEnd();
+}
+void color2()
+{       //case s(2nd jar)
+  glBegin(GL_POLYGON);
+	
+	glColor3f(0.0,0.0,1.0);        
+	glVertex2i(x3,y3);//y3=150
+	glVertex2i(x4,y3);
+	glVertex2i(x4,y4);//y4=330
+	glVertex2i(x3,y4);
+  glEnd();
+}
+void color3()
+{       //case a (1st jar)
+  glBegin(GL_POLYGON);
+	
+	glColor3f(0.0,0.0,1.0);        
+	glVertex2i(x11,y11);//y1=150
+	glVertex2i(x22,y11);
+	glVertex2i(x22,y22);//400
+	glVertex2i(x11,y22);
+  glEnd();
+}
+void color4()
+{       //case s(2nd jar)
+  glBegin(GL_POLYGON);
+	
+	glColor3f(0.0,0.0,1.0);        
+	glVertex2i(x33,y33);//y3=150
+	glVertex2i(x44,y33);
+	glVertex2i(x44,y44);//y4=330
+	glVertex2i(x33,y44);
+  glEnd();
+}
+void drawRect1(void)
+{
+    
+    	
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glLineWidth(30);
+  
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+    glBegin(GL_POLYGON);
+	glColor3f(1.0,1.0,1.0);        
+	glVertex2i(x1,y1);
+        glVertex2i(x2,y1);
+        glVertex2i(x2,y2max);
+        glVertex2i(x1,y2max);
+    glEnd();
+    glBegin(GL_POLYGON);
+	glColor3f(1.0,1.0,1.0);
+        glVertex2i(x3,y3);
+        glVertex2i(x4,y3);
+        glVertex2i(x4,y4max);
+        glVertex2i(x3,y4max);
+    glEnd();
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    rectangle();
+    color1();
+    color2();	
+    text();
+    text2();
+    text3();
+    
+    //color2();	
+   
+   glFlush();
+	glutSwapBuffers();	
+}
+void drawRect2(void)
+{
+    
+    	
+    glClear(GL_COLOR_BUFFER_BIT);
+    
+    glLineWidth(30);
+  
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+    
+    glBegin(GL_POLYGON);
+	glColor3f(1.0,1.0,1.0);        
+	glVertex2i(x11,y11);
+        glVertex2i(x22,y11);
+        glVertex2i(x22,y22max);
+        glVertex2i(x11,y22max);
+    glEnd();
+    glBegin(GL_POLYGON);
+	glColor3f(1.0,1.0,1.0);
+        glVertex2i(x33,y33);
+        glVertex2i(x44,y33);
+        glVertex2i(x44,y44max);
+        glVertex2i(x33,y44max);
+    glEnd();
+
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    
+    rectangle();
+    color3();
+    color4();	
+    text();
+    text2();
+    text3();
+    
+    //color2();	
+       
+    glFlush();	
+	glutSwapBuffers();
+}
+void display1(void)
+{	
+	glClearColor(0.8,0.1960,0.6,0.0);
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.85, 0.85, 0.10);
+	write(400,650,0.2,(char*)"SRI KRISHNA INSTITUTE OF TECHNOLOGY");
+	glColor3f(0.0, 1.0, 0.0);
+	write(250,550,0.2,(char*)"GRAPHICAL IMPLEMENTATION OF WATER JUG PROBLEM AI(4,3)");
+	glColor3f(0.0, 1.0, 1.0);
+	write(900,20,0.17,(char*)"PRESS F TO CONTINUE...");
+	glColor3f(0, 0, 0);
+	write(500,480,0.2,(char*)"SUBMITTED BY:");
+	
+	glColor3f(0.90, 0.91, 0.98);
+	write(300,400,0.2,(char*)"ISHMEET SINGH");
+	write(800,400,0.2,(char*)"KESHAV ISSAR");
+	write(300,350,0.2,(char*)"(1KT16CS035)");
+	write(800,350,0.2,(char*)"(1KT16CS025)");
+	write(450,280,0.2,(char*)"UNDER THE GUIDANCE OF :");
+	glColor3f(0.85, 0.85, 0.10);
+	write(550,200,0.2,(char*)"Mr. SATISHA G. ");
+	write(420,140,0.2,(char*)"LECTURER, DEPARTMENT OF CS&E ");
+	glColor3f(0.0, 0.8, 1.0);
+	write(x_pos,70,0.15,(char*)"ATRIA INSTITUTE OF TECHNOLOGY");
+	glutPostRedisplay();
+	glFlush();
+}
+void display2(void)
+{
+	glClearColor(0.52352,0.37254,0.523529,1.0);	
+	glClear(GL_COLOR_BUFFER_BIT);
+	glColor3f(0.85, 0.85, 0.10);
+	write(220,400,0.4,(char*)"MENU");
+	glColor3f(1.0, 0.498039, 0.0);
+	write(80,300,0.2,(char*)"[1] SOLVE PUZZLE (AUTO)");
+	write(80,240,0.2,(char*)"[2] SOLVE PUZZLE (MANUAL)");
+	write(80,180,0.2,(char*)"[3] EXIT");
+	
+	glutPostRedisplay();
+	glFlush();
+	glutSwapBuffers();
+}
+
+void reshape(int width,int height)
+{
+	
+	glViewport(0,0,width,height);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(0,GLdouble(width),0,GLdouble(height));
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+}
+
+void timer(int)
+{
+	glutPostRedisplay();
+	glutTimerFunc(1000/60,timer,0);
+	switch(state)
+	{
+	case 1:		
+				
+			if(flag==0)
+			{
+				r=y4-y3;
+				yd1=y2-y1;
+				if(yd1!=target && y4==y3)
+				{	y4=y4max;
+				}
+				else if(y2<y2max && y4>y3)
+				{
+						
+					if( yd1!=target && y4!=y3)
+					{	
+						if(y4>y3 && y2==y1)
+						{	if(y2<y2max)
+							{	y2+=1;
+								y4-=1; 
+							}
+						}
+						if(y4>y3 && y2>y1)
+						{	
+							if(r!=0 && y2<y2max)
+							{	
+								y2+=1;
+								y4-=1;
+							}
+						}
+					}
+					if(yd1==target && y4!=y3)
+					{ 		
+							if(y4>y3 && y2==y1)
+							{	if(y2<y2max)
+								{	y2+=1;
+									y4-=1; 
+								}
+							}
+							if(y4>y3 && y2>y1)
+							{	
+								if(r!=0 && y2<y2max)
+								{	
+									y2+=1;
+									y4-=1;
+								}
+							}
+						
+					}
+						
+						
+				}
+				else if(r==target && y2>y1)
+				{	
+					
+					flag=1;
+					
+					/*if(y4>y3)
+					{	y4-=1;
+						y2+=1;
+					}*/
+				}
+			}	
+			glutPostRedisplay();
+			
+			
+			break;
+	case 2:		if(flag==0)
+			{	r=y4-y3;
+				yd1=y2-y1;
+				if(r!=target && y2==y1)
+				{	y2=y2max;
+				}
+				else if(y4<y4max && y2>y1)
+					{
+							
+						if( r!=target && y2!=y1)
+						{	
+							if(y2>y1 && y4==y3)
+							{	if(y4<y4max)
+								{	y4+=1;
+									y2-=1; 
+								}
+							}
+							if(y2>y1 && y4>y3)
+							{	
+								if(yd1!=0 && y4<y4max)
+								{	
+									y4+=1;
+									y2-=1;
+								}
+							}
+						}
+						if(r==target && y2!=y1)
+						{ 		
+								if(y2>y1 && y4==y3)
+								{	if(y4<y4max)
+									{	y4+=1;
+										y3-=1; 
+									}
+								}
+								if(y2>y1 && y4>y3)
+								{	
+									if(yd1!=0 && y4<y4max)
+									{	
+										y4+=1;
+										y2-=1;
+									}
+								}
+							
+						}
+							
+							
+					}
+					else if(yd1==target && y4>y3)
+					{	
+						
+						flag=1;
+						
+					}			
+			}
+			break;
+	case 3:		y4=y4max;
+			break;
+	case 4:		y2=y2max;
+			break;	
+	}
+	
+}
+void timer2(int)
+{	
+	glutPostRedisplay();
+	glutTimerFunc(1000/60,timer2,0);
+	switch(state)
+	{
+	case 1:
+			if(y22<y22max) 
+				y22+=2;
+			break;
+	case 2:
+			if(y44<y44max)
+				y44+=1;
+			break;
+	case 3:		
+			if(y22>y11)
+				y22-=1;
+			break;
+	case 4:		if(y44>y33)
+				y44-=1;
+			break;
+	case 5:		if(y22<y22max && y44>y33)
+				{
+					r=y44-y33;
+					
+					if(y44>y33 && y22==y11)
+					{	if(y22<y22max)
+						{	y22+=1;
+							y44-=1; 
+						}
+					}
+					if(y44>y33 && y22>y11)
+					{	
+						if(r!=0 && y22<y22max)
+						{	
+							y22+=1;
+							y44-=1;
+						}
+					}
+					
+					
+					
+				}
+			break;
+	case 6: 	if(y44<y44max && y22>y11)
+				{
+					r=y22-y11;
+					
+					if(y22>y11 && y44==y33)
+					{	if(y44<y44max)
+						{	y44+=1;
+							y22-=1; 
+						}
+					}
+					if(y22>y11 && y44>y33)
+					{	
+						if(r!=0 && y44<y44max)
+						{	
+							y44+=1;
+							y22-=1;
+						}
+					}
+					
+					
+					
+				}
+			break;
+	}
+	
+}
+void timer3(int)	//for college name movement
+{
+	
+	glutTimerFunc(1000/60,timer3,0);
+	x_pos-=1.0;
+	if(x_pos<-350.0)
+		x_pos=1300.0;
+	glutPostRedisplay();
+}
+int main(int argc, char** argv)
+{
+	glutInit(&argc,argv);
+	glutInitWindowSize(1100,1000);
+	glutInitWindowPosition(10,10);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	first=glutCreateWindow("WATER JUG PROBLEM");
+	glutDisplayFunc(display1);
+	glutKeyboardFunc(keyboard1);
+	glutTimerFunc(1000/60,timer3,0);
+	glutReshapeFunc(reshape);
+	glClearColor(0.0f,0.0f,0.0f,1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+	myinit();
+
+	glutMainLoop();
+	return 0;
+}
